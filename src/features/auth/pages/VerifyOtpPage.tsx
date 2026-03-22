@@ -10,6 +10,7 @@ import { useLocation, useNavigate, Navigate } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 import { useVerifyOtp } from "../api/auth.hooks";
 import doctorImg from "@/assets/login/doctor.svg";
+import { useAuthStore } from "../store/auth.store";
 
 export default function VerifyOtpPage() {
   const location = useLocation();
@@ -89,7 +90,11 @@ export default function VerifyOtpPage() {
     {
       onSuccess: (data) => {
         // strongly typed
-        localStorage.setItem("token", data.token);
+        useAuthStore.getState().setAuth({
+          token: data.token,
+          type: data.type,
+          isActive: data.is_active,
+        });
 
         // navigate after success
         navigate("/dashboard", { replace: true });

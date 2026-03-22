@@ -13,5 +13,5 @@ export interface VerifyOtpPayload {
 export interface VerifyOtpResponse {
   token: string;
   is_active: boolean;
-  type: "csm" | "admin" | "user"; // extend if needed
+  type: "csm" | "client_admin" | "clinical_team"; 
 }
