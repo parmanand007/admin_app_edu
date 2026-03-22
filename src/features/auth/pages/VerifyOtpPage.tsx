@@ -9,7 +9,7 @@ import {
 import { useLocation, useNavigate, Navigate } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 import { useVerifyOtp } from "../api/auth.hooks";
-import doctorImg from "../../../assets/login/doctor.svg";
+import doctorImg from "@/assets/login/doctor.svg";
 
 export default function VerifyOtpPage() {
   const location = useLocation();
@@ -81,11 +81,22 @@ export default function VerifyOtpPage() {
 
   const finalOtp = otp.join("");
 
-  const handleVerify = () => {
-    if (finalOtp.length !== 6) return;
+ const handleVerify = () => {
+  if (finalOtp.length !== 6) return;
 
-    mutate({ email, otp: finalOtp });
-  };
+  mutate(
+    { email, otp: finalOtp },
+    {
+      onSuccess: (data) => {
+        // strongly typed
+        localStorage.setItem("token", data.token);
+
+        // navigate after success
+        navigate("/dashboard", { replace: true });
+      },
+    }
+  );
+};
 
   return (
     <Box display="flex" height="100vh">
@@ -185,7 +196,9 @@ export default function VerifyOtpPage() {
               {otp.map((digit, index) => (
                 <input
                   key={index}
-                  ref={(el) => (inputsRef.current[index] = el)}
+                  ref={(el) => {
+        inputsRef.current[index] = el;
+      }}
                   value={digit}
                   onChange={(e) => handleChange(e.target.value, index)}
                   onKeyDown={(e) => handleKeyDown(e, index)}
