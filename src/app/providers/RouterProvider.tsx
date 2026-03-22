@@ -1,21 +1,48 @@
-
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import LoginPage from "../../features/auth/pages/LoginPage";
-import VerifyOtpPage from "../../features/auth/pages/VerifyOtpPage";
+
+// auth pages
+import LoginPage from "@/features/auth/pages/LoginPage";
+import VerifyOtpPage from "@/features/auth/pages/VerifyOtpPage";
+
+// layout + protected
+import AppLayout from "@/shared/layout/AppLayout";
+import ProtectedRoute from "@/shared/components/ProtectedRoute";
+
+// pages
+import DashboardPage from "@/features/dashboard/pages/DashboardPage";
 
 export default function AppRouter() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Default route */}
-        <Route path="/" element={<Navigate to="/login" />} />
 
-        {/* Auth routes */}
+        {/* Public Routes */}
         <Route path="/login" element={<LoginPage />} />
         <Route path="/verify-otp" element={<VerifyOtpPage />} />
 
+        {/* Protected Layout */}
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <AppLayout />
+            </ProtectedRoute>
+          }
+        >
+          {/* Default redirect */}
+          <Route index element={<Navigate to="/dashboard" replace />} />
+
+          {/* Dashboard */}
+          <Route path="dashboard" element={<DashboardPage />} />
+
+          {/* Example pages */}
+          <Route path="users" element={<div>Users Page</div>} />
+          <Route path="reports" element={<div>Reports Page</div>} />
+        </Route>
+
         {/* Fallback */}
-        <Route path="*" element={<Navigate to="/login" />} />
+        <Route path="*" element={<Navigate to="/login" replace />} />
+
       </Routes>
     </BrowserRouter>
   );

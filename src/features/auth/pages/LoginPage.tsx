@@ -10,7 +10,7 @@ import {
 import { useState, useMemo } from "react";
 import { useRequestOtp } from "../api/auth.hooks";
 import { useNavigate } from "react-router-dom";
-import doctorImg from "../../../assets/login/doctor.svg";
+import doctorImg from "@/assets/login/doctor.svg";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
