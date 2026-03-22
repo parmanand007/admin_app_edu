@@ -1,5 +1,5 @@
 
-import api from "../../../utils/axios";
+import { api } from "@/shared/api/axios";
 import {
   RequestOtpPayload,
   VerifyOtpPayload,

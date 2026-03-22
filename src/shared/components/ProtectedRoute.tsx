@@ -1,15 +1,10 @@
 import { Navigate } from "react-router-dom";
+import { useAuthStore } from "@/features/auth/store/auth.store";
 
-export default function ProtectedRoute({
-  children,
-}: {
-  children: JSX.Element;
-}) {
-  const token = localStorage.getItem("token");
+export default function ProtectedRoute({ children }: { children: React.ReactNode }) {
+  const token = useAuthStore((s) => s.token);
 
-  if (!token) {
-    return <Navigate to="/login" replace />;
-  }
+  if (!token) return <Navigate to="/login" replace />;
 
-  return children;
+  return <>{children}</>;
 }
