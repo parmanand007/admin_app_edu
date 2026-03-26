@@ -1,26 +1,31 @@
 // features/organization/api/org.hooks.ts
+
 import { useEffect } from "react";
-import { api } from "@/shared/api/axios";
-import { useAuthStore } from "@/features/auth/store/auth.store";
+import { useQuery } from "@tanstack/react-query";
 import { useOrgStore } from "../store/org.store";
+import { getProfile } from "@/features/dashboard/api/dashboard.api";
 
 export const useInitializeOrganizations = () => {
-  const type = useAuthStore((s) => s.type);
   const { setOrganizations, setSelectedOrg } = useOrgStore();
 
+  const { data, isSuccess } = useQuery({
+    queryKey: ["profile"],
+    queryFn: getProfile,
+  });
+
   useEffect(() => {
-    const fetch = async () => {
-      const res = await api.get("/organizations");
+    if (!isSuccess || !data) return;
 
-      if (type === "client_admin") {
-        setOrganizations([res.data]);
-        setSelectedOrg(res.data);
-      } else {
-        setOrganizations(res.data);
-        setSelectedOrg(res.data[0]);
-      }
-    };
+    const orgs = data.organizations.map((org) => ({
+      org_id: org.org_id,
+      name: org.name,
+    }));
 
-    fetch();
-  }, [type]);
+    setOrganizations(orgs);
+
+    // default selection
+    if (orgs.length > 0) {
+      setSelectedOrg(orgs[0]);
+    }
+  }, [data, isSuccess, setOrganizations, setSelectedOrg]);
 };
