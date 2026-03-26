@@ -1,29 +1,55 @@
-// shared/layout/Topbar.tsx
+// shared/layout/AppLayout.tsx
 
-import { Box, Typography, Avatar } from "@mui/material";
+import { Box } from "@mui/material";
+import { Outlet } from "react-router-dom";
 
-export default function Topbar() {
+import Sidebar from "./Sidebar";
+import Topbar from "./Topbar";
+import AppBreadcrumbs from "../components/AppBreadcrumbs";
+
+import { useInitializeOrganizations } from "@/features/organization/api/org.hooks";
+
+export default function AppLayout() {
+  useInitializeOrganizations();
+
   return (
-    <Box
-      sx={{
-        height: 64,
-        px: 3,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        borderBottom: "1px solid #E5E7EB",
-        bgcolor: "#fff",
-      }}
-    >
-      {/* Title */}
-      <Typography variant="h6" fontWeight={600}>
-        Dashboard
-      </Typography>
+    <Box sx={{ display: "flex", height: "100vh", overflow: "hidden" }}>
+      
+      <Sidebar />
 
-      {/* Right Section */}
-      <Box display="flex" alignItems="center" gap={2}>
-        <Typography variant="body2">John Doe</Typography>
-        <Avatar sx={{ width: 32, height: 32 }} />
+      <Box
+        sx={{
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+          minWidth: 0,
+        }}
+      >
+        {/* Topbar */}
+        <Box
+          sx={{
+            position: "sticky",
+            top: 0,
+            zIndex: 1100,
+            bgcolor: "#fff",
+            borderBottom: "1px solid #E5E7EB",
+          }}
+        >
+          <Topbar />
+        </Box>
+
+        {/* Content */}
+        <Box sx={{ flex: 1, overflow: "auto", bgcolor: "#F8FAFC" }}>
+          <Box sx={{ p: 3, maxWidth: 1400, mx: "auto" }}>
+            
+            <AppBreadcrumbs />
+
+            <Box mt={2}>
+              <Outlet />
+            </Box>
+
+          </Box>
+        </Box>
       </Box>
     </Box>
   );

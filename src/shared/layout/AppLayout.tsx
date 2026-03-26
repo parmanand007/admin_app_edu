@@ -1,15 +1,14 @@
 // shared/layout/AppLayout.tsx
+
 import { Box } from "@mui/material";
 import { Outlet } from "react-router-dom";
 
 import Sidebar from "./Sidebar";
 import Topbar from "./Topbar";
-import AppBreadcrumbs from "../components/AppBreadcrumbs";
 
 import { useInitializeOrganizations } from "@/features/organization/api/org.hooks";
 
 export default function AppLayout() {
-  // Initialize organizations once after login
   useInitializeOrganizations();
 
   return (
@@ -17,58 +16,52 @@ export default function AppLayout() {
       sx={{
         display: "flex",
         height: "100vh",
-        overflow: "hidden", // prevents body scroll
+        overflow: "hidden",
       }}
     >
       {/* Sidebar */}
       <Sidebar />
 
-      {/* Main Layout */}
+      {/* Main */}
       <Box
         sx={{
           flex: 1,
           display: "flex",
           flexDirection: "column",
-          minWidth: 0, // prevents overflow issues
+          minWidth: 0,
         }}
       >
-        {/* Topbar (fixed behavior) */}
+        {/* Topbar (now includes breadcrumbs) */}
         <Box
           sx={{
             position: "sticky",
             top: 0,
             zIndex: 1100,
-            backgroundColor: "background.paper",
-            borderBottom: "1px solid",
-            borderColor: "divider",
+            bgcolor: "#fff",
+            borderBottom: "1px solid #E5E7EB",
           }}
         >
           <Topbar />
         </Box>
 
-        {/* Content Area */}
+        {/* Content */}
         <Box
           sx={{
             flex: 1,
             overflow: "auto",
-            backgroundColor: "grey.50",
+            bgcolor: "#F8FAFC",
           }}
         >
           <Box
             sx={{
               p: 3,
-              maxWidth: "1400px", // keeps content centered & consistent
+              maxWidth: 1400,
               mx: "auto",
               width: "100%",
             }}
           >
-            {/* Breadcrumbs */}
-            <AppBreadcrumbs />
-
-            {/* Page Content */}
-            <Box mt={2}>
-              <Outlet />
-            </Box>
+            {/* Page Content ONLY */}
+            <Outlet />
           </Box>
         </Box>
       </Box>

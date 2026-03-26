@@ -2,7 +2,7 @@
 import { create } from "zustand";
 
 interface Organization {
-  id: string;
+  org_id: string;
   name: string;
 }
 

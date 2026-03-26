@@ -22,8 +22,8 @@ api.interceptors.request.use(
     }
 
     // attach org_id (critical for your system)
-    if (org?.id) {
-      config.headers["org_id"] = org.id;
+    if (org?.org_id) {
+      config.headers["organization"] = org.org_id;
     }
 
     return config;
