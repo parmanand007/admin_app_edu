@@ -1,33 +1,44 @@
 import { Breadcrumbs, Link, Typography } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
 
-const routeMap: Record<string, string> = {
+const routeNameMap: Record<string, string> = {
   dashboard: "Dashboard",
   users: "Users",
+  reports: "Reports",
 };
 
 export default function AppBreadcrumbs() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const paths = location.pathname.split("/").filter(Boolean);
+  const pathnames = location.pathname.split("/").filter(Boolean);
 
   return (
-    <Breadcrumbs sx={{ mb: 2 }}>
-      <Link onClick={() => navigate("/dashboard")} sx={{ cursor: "pointer" }}>
+    <Breadcrumbs separator="/" aria-label="breadcrumb">
+      <Link
+        sx={{ cursor: "pointer", fontSize: 13 }}
+        onClick={() => navigate("/dashboard")}
+        color="inherit"
+      >
         Customer Admin
       </Link>
 
-      {paths.map((segment, index) => {
-        const to = "/" + paths.slice(0, index + 1).join("/");
-        const isLast = index === paths.length - 1;
+      {pathnames.map((value, index) => {
+        const isLast = index === pathnames.length - 1;
 
-        const label = routeMap[segment] || segment;
+        const label = routeNameMap[value] || value;
 
         return isLast ? (
-          <Typography key={to}>{label}</Typography>
+          <Typography key={value} fontSize={13} color="text.primary">
+            {label}
+          </Typography>
         ) : (
-          <Link key={to} onClick={() => navigate(to)} sx={{ cursor: "pointer" }}>
+          <Link
+            key={value}
+            sx={{ cursor: "pointer", fontSize: 13 }}
+            onClick={() => navigate(`/${value}`)}
+            color="inherit"
+          >
             {label}
           </Link>
         );
