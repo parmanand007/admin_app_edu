@@ -1,28 +1,31 @@
-// features/dashboard/components/StatCard.tsx
 
 import { Box, Typography } from "@mui/material";
 
-interface StatCardProps {
+export default function StatCard({
+  title,
+  value,
+  compact = false,
+}: {
   title: string;
   value: number;
-}
-
-export default function StatCard({ title, value }: StatCardProps) {
+  compact?: boolean;
+}) {
   return (
     <Box
       sx={{
-        p: 2,
+        p: compact ? 1.5 : 2,
         borderRadius: 2,
         border: "1px solid #E5E7EB",
         backgroundColor: "#fff",
+        textAlign: compact ? "center" : "left",
       }}
     >
-      <Typography fontSize={12} color="text.secondary">
-        {title}
+      <Typography fontSize={18} fontWeight={600}>
+        {value}
       </Typography>
 
-      <Typography fontSize={20} fontWeight={600}>
-        {value}
+      <Typography fontSize={12} color="#64748B">
+        {title}
       </Typography>
     </Box>
   );

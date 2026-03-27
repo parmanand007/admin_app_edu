@@ -1,7 +1,6 @@
-// shared/layout/Topbar.tsx
-
 import { Box, Typography, Avatar } from "@mui/material";
 import { useAuthStore } from "@/features/auth/store/auth.store";
+import AppBreadcrumbs from "@/shared/components/AppBreadcrumbs";
 
 export default function Topbar() {
   const user = useAuthStore((s) => s.user);
@@ -17,29 +16,10 @@ export default function Topbar() {
         bgcolor: "#fff",
       }}
     >
-      {/* Left Section (Title / Context) */}
-      <Box>
-        <Typography
-          sx={{
-            fontSize: 16,
-            fontWeight: 600,
-            color: "#0F172A",
-          }}
-        >
-          Customer Admin
-        </Typography>
+      {/* LEFT: Breadcrumbs */}
+      <AppBreadcrumbs />
 
-        <Typography
-          sx={{
-            fontSize: 13,
-            color: "#64748B",
-          }}
-        >
-          Welcome to DoctusTech Admin
-        </Typography>
-      </Box>
-
-      {/* Right Section (User Info) */}
+      {/* RIGHT: User Info */}
       <Box
         sx={{
           display: "flex",
@@ -47,7 +27,6 @@ export default function Topbar() {
           gap: 2,
         }}
       >
-        {/* User Name */}
         <Typography
           sx={{
             fontSize: 14,
@@ -58,7 +37,6 @@ export default function Topbar() {
           {user?.first_name || "User"}
         </Typography>
 
-        {/* Avatar */}
         <Avatar
           sx={{
             width: 36,
