@@ -8,9 +8,13 @@ import { getProfile } from "@/features/dashboard/api/dashboard.api";
 export const useInitializeOrganizations = () => {
   const { setOrganizations, setSelectedOrg } = useOrgStore();
 
+  const token = localStorage.getItem("auth-storage"); // or from store
+
   const { data, isSuccess } = useQuery({
     queryKey: ["profile"],
     queryFn: getProfile,
+    enabled: !!token, // critical fix
+    retry: false, // avoid infinite retry loop during debug
   });
 
   useEffect(() => {
@@ -23,9 +27,8 @@ export const useInitializeOrganizations = () => {
 
     setOrganizations(orgs);
 
-    // default selection
     if (orgs.length > 0) {
       setSelectedOrg(orgs[0]);
     }
-  }, [data, isSuccess, setOrganizations, setSelectedOrg]);
+  }, [data, isSuccess]);
 };

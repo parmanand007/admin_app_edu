@@ -5,11 +5,11 @@ import { Outlet } from "react-router-dom";
 
 import Sidebar from "./Sidebar";
 import Topbar from "./Topbar";
-
 import { useInitializeOrganizations } from "@/features/organization/api/org.hooks";
 
 export default function AppLayout() {
-  useInitializeOrganizations();
+  // useInitializeOrganizations();
+  console.log("AppLayout mounted");
 
   return (
     <Box
@@ -31,7 +31,7 @@ export default function AppLayout() {
           minWidth: 0,
         }}
       >
-        {/* Topbar (now includes breadcrumbs) */}
+        {/* Topbar */}
         <Box
           sx={{
             position: "sticky",
@@ -60,7 +60,7 @@ export default function AppLayout() {
               width: "100%",
             }}
           >
-            {/* Page Content ONLY */}
+            {/* Correct rendering */}
             <Outlet />
           </Box>
         </Box>
