@@ -1,10 +1,9 @@
 // shared/api/axios.ts
 
-import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
+import axios, { AxiosError } from "axios";
 import { useAuthStore } from "@/features/auth/store/auth.store";
 import { useOrgStore } from "@/features/organization/store/org.store";
 
-// create instance
 export const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || "http://localhost:8002/api",
   timeout: 10000,
@@ -12,17 +11,15 @@ export const api = axios.create({
 
 // request interceptor
 api.interceptors.request.use(
-  (config: InternalAxiosRequestConfig) => {
+  (config) => {
     const token = useAuthStore.getState().token;
     const org = useOrgStore.getState().selectedOrg;
 
-    // attach token
-    if (token) {
+    if (!config.skipAuth && token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
 
-    // attach org_id (critical for your system)
-    if (org?.org_id) {
+    if (!config.skipOrg && org?.org_id) {
       config.headers["organization"] = org.org_id;
     }
 
@@ -37,17 +34,9 @@ api.interceptors.response.use(
   (error: AxiosError) => {
     const status = error.response?.status;
 
-    // handle unauthorized globally
     if (status === 401) {
       useAuthStore.getState().logout();
-
-      // optional: redirect
-      window.location.href = "/login";
     }
-
-    // you can extend this:
-    // 403 → permission
-    // 500 → toast/logging
 
     return Promise.reject(error);
   }

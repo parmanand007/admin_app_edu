@@ -31,6 +31,7 @@ export default function AppRouter() {
         >
           {/* Default redirect */}
           <Route index element={<Navigate to="/dashboard" replace />} />
+          {/* <Route index element={<div>Home Page</div>} /> */}
 
           {/* Dashboard */}
           <Route path="dashboard" element={<DashboardPage />} />

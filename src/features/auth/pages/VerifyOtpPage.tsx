@@ -19,12 +19,14 @@ export default function VerifyOtpPage() {
 
   const { mutate, isPending } = useVerifyOtp();
 
+  // use zustand properly (react-aware)
+  const setAuth = useAuthStore((s) => s.setAuth);
+
   // redirect if no email
   if (!email) return <Navigate to="/login" />;
 
   // OTP state (6 digits)
   const [otp, setOtp] = useState<string[]>(["", "", "", "", "", ""]);
-
   const inputsRef = useRef<Array<HTMLInputElement | null>>([]);
 
   // timer (mock 45 sec)
@@ -82,26 +84,29 @@ export default function VerifyOtpPage() {
 
   const finalOtp = otp.join("");
 
- const handleVerify = () => {
-  if (finalOtp.length !== 6) return;
+  // verify handler (fixed)
+  const handleVerify = () => {
+    if (finalOtp.length !== 6) return;
 
-  mutate(
-    { email, otp: finalOtp },
-    {
-      onSuccess: (data) => {
-        // strongly typed
-        useAuthStore.getState().setAuth({
-          token: data.token,
-          type: data.type,
-          isActive: data.is_active,
-        });
+    mutate(
+      { email, otp: finalOtp },
+      {
+        onSuccess: (data) => {
+          // correct zustand usage
+          setAuth({
+            token: data.token,
+            type: data.type,
+            isActive: data.is_active,
+          });
 
-        // navigate after success
-        navigate("/dashboard", { replace: true });
-      },
-    }
-  );
-};
+          // prevent race condition (critical)
+          setTimeout(() => {
+            navigate("/dashboard", { replace: true });
+          }, 0);
+        },
+      }
+    );
+  };
 
   return (
     <Box display="flex" height="100vh">
@@ -192,18 +197,13 @@ export default function VerifyOtpPage() {
             </Typography>
 
             {/* OTP BOXES */}
-            <Box
-              display="flex"
-              gap={1}
-              mb={3}
-              onPaste={handlePaste}
-            >
+            <Box display="flex" gap={1} mb={3} onPaste={handlePaste}>
               {otp.map((digit, index) => (
                 <input
                   key={index}
                   ref={(el) => {
-        inputsRef.current[index] = el;
-      }}
+                    inputsRef.current[index] = el;
+                  }}
                   value={digit}
                   onChange={(e) => handleChange(e.target.value, index)}
                   onKeyDown={(e) => handleKeyDown(e, index)}
@@ -235,7 +235,6 @@ export default function VerifyOtpPage() {
               SIGN IN
             </Button>
 
-            {/* RESEND */}
             <Typography
               sx={{
                 fontSize: 13,

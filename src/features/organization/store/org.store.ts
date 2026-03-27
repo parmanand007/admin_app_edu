@@ -1,4 +1,5 @@
 // features/organization/store/org.store.ts
+
 import { create } from "zustand";
 
 interface Organization {
@@ -11,14 +12,53 @@ interface OrgState {
   selectedOrg: Organization | null;
 
   setOrganizations: (orgs: Organization[]) => void;
-  setSelectedOrg: (org: Organization) => void;
+
+  // support both direct + functional update
+  setSelectedOrg: (
+    org:
+      | Organization
+      | null
+      | ((prev: Organization | null) => Organization | null)
+  ) => void;
+
+  // helper utilities (important for real apps)
+  resetOrg: () => void;
 }
 
-export const useOrgStore = create<OrgState>((set) => ({
+export const useOrgStore = create<OrgState>((set, get) => ({
   organizations: [],
   selectedOrg: null,
 
-  setOrganizations: (orgs) => set({ organizations: orgs }),
+  setOrganizations: (orgs) => {
+    set((state) => {
+      // if current selectedOrg is not in new list → reset
+      const isValidSelected = orgs.some(
+        (o) => o.org_id === state.selectedOrg?.org_id
+      );
 
-  setSelectedOrg: (org) => set({ selectedOrg: org }),
+      return {
+        organizations: orgs,
+        selectedOrg: isValidSelected
+          ? state.selectedOrg
+          : orgs.length > 0
+          ? orgs[0] // auto-select first org
+          : null,
+      };
+    });
+  },
+
+  setSelectedOrg: (org) => {
+    set((state) => ({
+      selectedOrg:
+        typeof org === "function"
+          ? org(state.selectedOrg)
+          : org,
+    }));
+  },
+
+  resetOrg: () =>
+    set({
+      organizations: [],
+      selectedOrg: null,
+    }),
 }));

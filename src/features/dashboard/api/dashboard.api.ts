@@ -8,10 +8,11 @@ import {
 } from "./dashboard.types";
 
 export const getProfile = async (): Promise<ProfileResponse> => {
-  const res = await api.get<ProfileResponse>("v1/profile/");
+  const res = await api.get<ProfileResponse>("v1/profile/", {
+    skipOrg: true,
+  });
   return res.data;
 };
-
 export const getOrgStats = async (): Promise<OrgStatsResponse> => {
   const res = await api.get<OrgStatsResponse>("v1/organizations/org_code/");
   return res.data;

@@ -1,55 +1,74 @@
-// shared/layout/AppLayout.tsx
+// shared/layout/Topbar.tsx
 
-import { Box } from "@mui/material";
-import { Outlet } from "react-router-dom";
+import { Box, Typography, Avatar } from "@mui/material";
+import { useAuthStore } from "@/features/auth/store/auth.store";
 
-import Sidebar from "./Sidebar";
-import Topbar from "./Topbar";
-import AppBreadcrumbs from "../components/AppBreadcrumbs";
-
-import { useInitializeOrganizations } from "@/features/organization/api/org.hooks";
-
-export default function AppLayout() {
-  useInitializeOrganizations();
+export default function Topbar() {
+  const user = useAuthStore((s) => s.user);
 
   return (
-    <Box sx={{ display: "flex", height: "100vh", overflow: "hidden" }}>
-      
-      <Sidebar />
-
-      <Box
-        sx={{
-          flex: 1,
-          display: "flex",
-          flexDirection: "column",
-          minWidth: 0,
-        }}
-      >
-        {/* Topbar */}
-        <Box
+    <Box
+      sx={{
+        height: 64,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        px: 3,
+        bgcolor: "#fff",
+      }}
+    >
+      {/* Left Section (Title / Context) */}
+      <Box>
+        <Typography
           sx={{
-            position: "sticky",
-            top: 0,
-            zIndex: 1100,
-            bgcolor: "#fff",
-            borderBottom: "1px solid #E5E7EB",
+            fontSize: 16,
+            fontWeight: 600,
+            color: "#0F172A",
           }}
         >
-          <Topbar />
-        </Box>
+          Customer Admin
+        </Typography>
 
-        {/* Content */}
-        <Box sx={{ flex: 1, overflow: "auto", bgcolor: "#F8FAFC" }}>
-          <Box sx={{ p: 3, maxWidth: 1400, mx: "auto" }}>
-            
-            <AppBreadcrumbs />
+        <Typography
+          sx={{
+            fontSize: 13,
+            color: "#64748B",
+          }}
+        >
+          Welcome to DoctusTech Admin
+        </Typography>
+      </Box>
 
-            <Box mt={2}>
-              <Outlet />
-            </Box>
+      {/* Right Section (User Info) */}
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          gap: 2,
+        }}
+      >
+        {/* User Name */}
+        <Typography
+          sx={{
+            fontSize: 14,
+            fontWeight: 500,
+            color: "#334155",
+          }}
+        >
+          {user?.first_name || "User"}
+        </Typography>
 
-          </Box>
-        </Box>
+        {/* Avatar */}
+        <Avatar
+          sx={{
+            width: 36,
+            height: 36,
+            bgcolor: "#0284C7",
+            fontSize: 14,
+          }}
+        >
+          {user?.first_name?.[0]?.toUpperCase() || "U"}
+        </Avatar>
       </Box>
     </Box>
   );
