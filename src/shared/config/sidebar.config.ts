@@ -1,7 +1,6 @@
 export const SIDEBAR_CONFIG = {
   csm: [
     { label: "Dashboard", path: "/dashboard" },
-    { label: "Organizations", path: "/organizations" },
     { label: "Users", path: "/users" }, 
   ],
   client_admin: [

@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useOrgStore } from "../store/org.store";
 import { getProfile } from "@/features/dashboard/api/dashboard.api";
+import { fetchOrganizationStats } from "./org.api";
 
 export const useInitializeOrganizations = () => {
   const { setOrganizations, setSelectedOrg } = useOrgStore();
@@ -31,4 +32,12 @@ export const useInitializeOrganizations = () => {
       setSelectedOrg(orgs[0]);
     }
   }, [data, isSuccess]);
+};
+
+
+export const useOrganizationStats = () => {
+  return useQuery({
+    queryKey: ["organization-stats"],
+    queryFn: fetchOrganizationStats,
+  });
 };
