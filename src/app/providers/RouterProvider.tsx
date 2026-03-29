@@ -10,6 +10,7 @@ import ProtectedRoute from "@/shared/components/ProtectedRoute";
 
 // pages
 import DashboardPage from "@/features/dashboard/pages/DashboardPage";
+import UsersPage from "@/features/users/pages/UsersPage";
 
 export default function AppRouter() {
   return (
@@ -37,7 +38,7 @@ export default function AppRouter() {
           <Route path="dashboard" element={<DashboardPage />} />
 
           {/* Example pages */}
-          <Route path="users" element={<div>Users Page</div>} />
+          <Route path="users" element={<UsersPage />} />
           <Route path="reports" element={<div>Reports Page</div>} />
         </Route>
 
