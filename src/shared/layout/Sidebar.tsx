@@ -21,34 +21,21 @@ export default function Sidebar() {
         p: 2,
         display: "flex",
         flexDirection: "column",
+        flexShrink: 0, 
       }}
     >
-      {/* Logo */}
-      <Typography
-        sx={{
-          fontSize: 22,
-          fontWeight: 700,
-          color: "#2DAAE1",
-          mb: 3,
-        }}
-      >
+      <Typography sx={{ fontSize: 22, fontWeight: 700, color: "#2DAAE1", mb: 3 }}>
         DOCTUS<span style={{ color: "#000" }}>TECH</span>
       </Typography>
 
-      {/* Organization Dropdown */}
       <Select
         size="small"
         value={selectedOrg?.org_id || ""}
         onChange={(e) => {
-          const org = organizations.find(
-            (o) => o.org_id === e.target.value
-          );
+          const org = organizations.find((o) => o.org_id === e.target.value);
           if (org) setSelectedOrg(org);
         }}
-        sx={{
-          mb: 3,
-          bgcolor: "#fff",
-        }}
+        sx={{ mb: 3, bgcolor: "#fff" }}
       >
         {organizations.map((org) => (
           <MenuItem key={org.org_id} value={org.org_id}>
@@ -57,14 +44,9 @@ export default function Sidebar() {
         ))}
       </Select>
 
-      {/* Menu */}
       <Box display="flex" flexDirection="column" gap={1}>
         {items.map((item) => (
-          <NavLink
-            key={item.path}
-            to={item.path}
-            style={{ textDecoration: "none" }}
-          >
+          <NavLink key={item.path} to={item.path} style={{ textDecoration: "none" }}>
             {({ isActive }) => (
               <Box
                 sx={{
@@ -74,10 +56,7 @@ export default function Sidebar() {
                   backgroundColor: isActive ? "#E0F2FE" : "transparent",
                   color: isActive ? "#0284C7" : "#334155",
                   fontWeight: 500,
-                  cursor: "pointer",
-                  "&:hover": {
-                    backgroundColor: "#E2E8F0",
-                  },
+                  "&:hover": { backgroundColor: "#E2E8F0" },
                 }}
               >
                 {item.label}
@@ -87,21 +66,13 @@ export default function Sidebar() {
         ))}
       </Box>
 
-      {/* Bottom */}
       <Box mt="auto">
         <Typography fontSize={12} color="text.secondary" mb={1}>
           ACCOUNT
         </Typography>
 
         <NavLink to="/settings" style={{ textDecoration: "none" }}>
-          <Box
-            sx={{
-              px: 2,
-              py: 1.2,
-              borderRadius: 1,
-              "&:hover": { backgroundColor: "#E2E8F0" },
-            }}
-          >
+          <Box sx={{ px: 2, py: 1.2, borderRadius: 1, "&:hover": { backgroundColor: "#E2E8F0" } }}>
             Settings
           </Box>
         </NavLink>
