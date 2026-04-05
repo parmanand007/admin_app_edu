@@ -14,7 +14,7 @@ export default function AppLayout() {
       sx={{
         display: "flex",
         height: "100vh",
-        overflow: "hidden", // prevents outer scroll
+        // overflow: "hidden", // prevents outer scroll
       }}
     >
       {/* Sidebar */}

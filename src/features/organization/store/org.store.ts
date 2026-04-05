@@ -1,5 +1,6 @@
 // features/organization/store/org.store.ts
 
+import { queryClient } from "@/shared/api/queryClient";
 import { create } from "zustand";
 
 interface Organization {
@@ -13,7 +14,6 @@ interface OrgState {
 
   setOrganizations: (orgs: Organization[]) => void;
 
-  // support both direct + functional update
   setSelectedOrg: (
     org:
       | Organization
@@ -21,7 +21,6 @@ interface OrgState {
       | ((prev: Organization | null) => Organization | null)
   ) => void;
 
-  // helper utilities (important for real apps)
   resetOrg: () => void;
 }
 
@@ -29,36 +28,54 @@ export const useOrgStore = create<OrgState>((set, get) => ({
   organizations: [],
   selectedOrg: null,
 
+  // Set org list and ensure valid selection
   setOrganizations: (orgs) => {
-    set((state) => {
-      // if current selectedOrg is not in new list → reset
-      const isValidSelected = orgs.some(
-        (o) => o.org_id === state.selectedOrg?.org_id
-      );
+    const prevSelected = get().selectedOrg;
 
-      return {
-        organizations: orgs,
-        selectedOrg: isValidSelected
-          ? state.selectedOrg
-          : orgs.length > 0
-          ? orgs[0] // auto-select first org
-          : null,
-      };
+    const isValidSelected = orgs.some(
+      (o) => o.org_id === prevSelected?.org_id
+    );
+
+    const nextSelected =
+      isValidSelected ? prevSelected : orgs.length > 0 ? orgs[0] : null;
+
+    set({
+      organizations: orgs,
+      selectedOrg: nextSelected,
     });
+
+    // If selected org changed → refetch queries
+    if (prevSelected?.org_id !== nextSelected?.org_id) {
+      queryClient.invalidateQueries();
+    }
   },
 
+  // Change selected org
   setSelectedOrg: (org) => {
-    set((state) => ({
-      selectedOrg:
-        typeof org === "function"
-          ? org(state.selectedOrg)
-          : org,
-    }));
+    const prevOrg = get().selectedOrg;
+
+    const nextOrg =
+      typeof org === "function" ? org(prevOrg) : org;
+
+    // Prevent unnecessary updates
+    if (prevOrg?.org_id === nextOrg?.org_id) return;
+
+    set({
+      selectedOrg: nextOrg,
+    });
+
+    // CRITICAL: refetch all active queries
+    queryClient.invalidateQueries();
   },
 
-  resetOrg: () =>
+  // Reset everything (logout / org change)
+  resetOrg: () => {
     set({
       organizations: [],
       selectedOrg: null,
-    }),
+    });
+
+    // Clear entire cache (important for auth/org switch)
+    queryClient.clear();
+  },
 }));

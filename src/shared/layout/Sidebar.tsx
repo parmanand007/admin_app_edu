@@ -151,25 +151,6 @@ export default function Sidebar() {
         })}
       </Box>
 
-      {/* Footer */}
-      <Box mt="auto">
-        <Typography fontSize={12} color="text.secondary" mb={1}>
-          ACCOUNT
-        </Typography>
-
-        <NavLink to="/settings" style={{ textDecoration: "none" }}>
-          <Box
-            sx={{
-              px: 2,
-              py: 1.2,
-              borderRadius: 2,
-              "&:hover": { backgroundColor: "#E2E8F0" },
-            }}
-          >
-            Settings
-          </Box>
-        </NavLink>
-      </Box>
     </Box>
   );
 }
