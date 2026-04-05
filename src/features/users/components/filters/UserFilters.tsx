@@ -1,42 +1,58 @@
 // features/users/components/UserFilters.tsx
 
-import { Box, MenuItem, Select, TextField, Button } from "@mui/material";
+import { Box, TextField, MenuItem, Button, Typography } from "@mui/material";
+
+const filters = [
+  { label: "Status", value: "Active" },
+  { label: "Region", value: "All" },
+  { label: "Clinic", value: "All" },
+  { label: "Role", value: "All" },
+  { label: "User Type", value: "All" },
+];
 
 export default function UserFilters() {
   return (
     <Box mb={3}>
-      {/* FILTER DROPDOWNS */}
+      {/* FILTER ROW */}
       <Box
         sx={{
-          display: "grid",
-          gridTemplateColumns: "repeat(6, 1fr)",
-          gap: 2,
+          display: "flex",
+          gap: 1.5,
+          flexWrap: "wrap",
           mb: 2,
         }}
       >
-        <Select size="small" defaultValue="Active">
-          <MenuItem value="Active">Active</MenuItem>
-        </Select>
+        {filters.map((f) => (
+          <Box key={f.label}>
+            {/* LABEL */}
+            <Typography
+              sx={{
+                fontSize: 12,
+                color: "#64748B",
+                mb: 0.5,
+              }}
+            >
+              {f.label}
+            </Typography>
 
-        <Select size="small" defaultValue="All">
-          <MenuItem value="All">All</MenuItem>
-        </Select>
-
-        <Select size="small" defaultValue="All">
-          <MenuItem value="All">All</MenuItem>
-        </Select>
-
-        <Select size="small" defaultValue="All">
-          <MenuItem value="All">All</MenuItem>
-        </Select>
-
-        <Select size="small" defaultValue="All">
-          <MenuItem value="All">All</MenuItem>
-        </Select>
-
-        <Select size="small" defaultValue="All">
-          <MenuItem value="All">All</MenuItem>
-        </Select>
+            {/* SELECT */}
+            <TextField
+              select
+              size="small"
+              value={f.value}
+              sx={{
+                minWidth: 140,
+                "& .MuiOutlinedInput-root": {
+                  borderRadius: "10px",
+                  fontSize: 13,
+                  height: 36,
+                },
+              }}
+            >
+              <MenuItem value={f.value}>{f.value}</MenuItem>
+            </TextField>
+          </Box>
+        ))}
       </Box>
 
       {/* SEARCH + ACTIONS */}
@@ -44,19 +60,52 @@ export default function UserFilters() {
         sx={{
           display: "flex",
           justifyContent: "space-between",
+          alignItems: "center",
           gap: 2,
         }}
       >
+        {/* SEARCH */}
         <TextField
           size="small"
-          fullWidth
           placeholder="Type to search name and email"
+          sx={{
+            width: 420,
+            "& .MuiOutlinedInput-root": {
+              borderRadius: "10px",
+              height: 36,
+              fontSize: 13,
+            },
+          }}
         />
 
-        <Box sx={{ display: "flex", gap: 2 }}>
-          <Button variant="outlined">Deactivate</Button>
-          <Button variant="contained">+ New User</Button>
-          <Button variant="outlined">Export</Button>
+        {/* ACTIONS */}
+        <Box sx={{ display: "flex", gap: 1.5 }}>
+          <Button
+            variant="outlined"
+            sx={{ minWidth: 120 }}
+          >
+            Deactivate
+          </Button>
+
+          <Button
+            variant="contained"
+            sx={{ minWidth: 140 }}
+          >
+            + New User
+          </Button>
+          <Button
+            variant="outlined"
+            sx={{ minWidth: 120 }}
+          >
+            Scheduled Email
+          </Button>
+
+          <Button
+            variant="outlined"
+            sx={{ minWidth: 100 }}
+          >
+            Export
+          </Button>
         </Box>
       </Box>
     </Box>

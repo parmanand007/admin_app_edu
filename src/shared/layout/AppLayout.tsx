@@ -2,21 +2,19 @@
 
 import { Box } from "@mui/material";
 import { Outlet } from "react-router-dom";
-
 import Sidebar from "./Sidebar";
 import Topbar from "./Topbar";
 import { useInitializeOrganizations } from "@/features/organization/api/org.hooks";
 
 export default function AppLayout() {
-  // useInitializeOrganizations();
-  console.log("AppLayout mounted");
+  useInitializeOrganizations();
 
   return (
     <Box
       sx={{
         display: "flex",
         height: "100vh",
-        overflow: "hidden",
+        overflow: "hidden", // prevents outer scroll
       }}
     >
       {/* Sidebar */}
@@ -29,14 +27,13 @@ export default function AppLayout() {
           display: "flex",
           flexDirection: "column",
           minWidth: 0,
+          height: "100%", // FIX
         }}
       >
         {/* Topbar */}
         <Box
           sx={{
-            position: "sticky",
-            top: 0,
-            zIndex: 1100,
+            flexShrink: 0,
             bgcolor: "#fff",
             borderBottom: "1px solid #E5E7EB",
           }}
@@ -44,25 +41,21 @@ export default function AppLayout() {
           <Topbar />
         </Box>
 
-        {/* Content */}
+        {/* ONLY SCROLL AREA */}
         <Box
           sx={{
             flex: 1,
-            overflow: "auto",
-            bgcolor: "#F8FAFC",
+            overflowY: "auto",
+            px: 4,
+            py: 4,
+            backgroundColor: "background.paper",
+
+            "&::-webkit-scrollbar": { display: "none" },
+            scrollbarWidth: "none",
+            msOverflowStyle: "none",
           }}
         >
-          <Box
-            sx={{
-              p: 3,
-              maxWidth: 1400,
-              mx: "auto",
-              width: "100%",
-            }}
-          >
-            {/* Correct rendering */}
-            <Outlet />
-          </Box>
+          <Outlet />
         </Box>
       </Box>
     </Box>

@@ -1,6 +1,6 @@
 // features/users/components/UserStats.tsx
 
-import { Grid, Typography } from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
 import UserStatCard from "./UserStatCard";
 import { useOrganizationStats } from "@/features/organization/api/org.hooks";
 
@@ -56,18 +56,17 @@ export default function UserStats() {
   ];
 
   return (
-    <Grid
-      container
+    <Box
       sx={{
         display: "grid",
-        gridTemplateColumns: "repeat(6, 1fr)",
+        gridTemplateColumns: "repeat(6, minmax(0, 1fr))",
         gap: 2,
-        mb: 3,
+        mb: 2,
       }}
     >
       {stats.map((item) => (
         <UserStatCard key={item.title} {...item} />
       ))}
-    </Grid>
+    </Box>
   );
 }
